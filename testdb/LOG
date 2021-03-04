@@ -1,0 +1,34 @@
+=============== Mar 3, 2021 (CST) ===============
+11:24:59.241228 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:24:59.271146 db@open opening
+11:24:59.273143 version@stat F·[] S·0B[] Sc·[]
+11:24:59.276218 db@janitor F·2 G·0
+11:24:59.276218 db@open done T·5.0725ms
+=============== Mar 3, 2021 (CST) ===============
+11:28:50.560971 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:28:50.586889 version@stat F·[] S·0B[] Sc·[]
+11:28:50.586889 db@open opening
+11:28:50.586889 journal@recovery F·1
+11:28:50.588885 journal@recovery recovering @1
+11:28:50.589882 version@stat F·[] S·0B[] Sc·[]
+11:28:50.596864 db@janitor F·2 G·0
+11:28:50.596864 db@open done T·9.9749ms
+=============== Mar 3, 2021 (CST) ===============
+11:30:12.146127 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:30:12.172033 version@stat F·[] S·0B[] Sc·[]
+11:30:12.172033 db@open opening
+11:30:12.172033 journal@recovery F·1
+11:30:12.173030 journal@recovery recovering @2
+11:30:12.176022 memdb@flush created L0@4 N·1 S·136B "joke Han,v1":"joke Han,v1"
+11:30:12.177021 version@stat F·[1] S·136B[136B] Sc·[0.25]
+11:30:12.184997 db@janitor F·3 G·0
+11:30:12.184997 db@open done T·12.9642ms
+=============== Mar 3, 2021 (CST) ===============
+11:30:42.623556 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:30:42.649504 version@stat F·[1] S·136B[136B] Sc·[0.25]
+11:30:42.649504 db@open opening
+11:30:42.650522 journal@recovery F·1
+11:30:42.651481 journal@recovery recovering @5
+11:30:42.652477 version@stat F·[1] S·136B[136B] Sc·[0.25]
+11:30:42.660455 db@janitor F·3 G·0
+11:30:42.660455 db@open done T·10.951ms
