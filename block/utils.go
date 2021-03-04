@@ -1,4 +1,4 @@
-package blockchain
+package block
 
 import (
 	"bytes"
@@ -8,15 +8,15 @@ import (
 
 //区块数据
 type BlockData struct{
-	Version int
-	HashPrevBlock Hash
+	Version        int
+	HashPrevBlock  Hash
 	HashMerkleRoot Hash
-	Time time.Time
-	Bits int
-	Nonce int
-	Txs string
-	TxCounter int
-	HashCurr Hash
+	Time           time.Time
+	Bits           int
+	Nonce          int
+	Txs            string
+	TxCounter      int
+	HashCurr       Hash
 }
 
 

@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/util"
+	"github.com/wei-rh/bc-demo/block"
+	"github.com/wei-rh/bc-demo/pow"
 	"log"
 	"time"
 )
 
 type BlockChain struct {
-	lastHash Hash  //最后一个区块哈希
+	lastHash block.Hash //最后一个区块哈希
 	//blocks map[Hash]*Block //全部区块信息，由区块哈希作为key检验
 	db *leveldb.DB  //leveldb 的连接
 }
@@ -23,7 +25,7 @@ func NewBlockChain(db *leveldb.DB) *BlockChain {
 	//初始化lastHash
 	data, err := bc.db.Get([]byte("lastHash"),nil)
 	if err==nil {
-		bc.lastHash = Hash(data)
+		bc.lastHash = block.Hash(data)
 	}
 	return bc
 }
@@ -39,31 +41,42 @@ func (bc *BlockChain) AddGensisBlock() *BlockChain {
 
 func (bc *BlockChain) AddBlock(txs string) *BlockChain {
 	//构建区块
-	b := NewBlock(bc.lastHash,txs)
+	b := block.NewBlock(bc.lastHash,txs)
+	//对区块做pow，工作量证明
+	//pow对象
+	p := pow.NewPow(b)
+	//开始工作证明
+	nonce,hash := p.Proof()
+	if hash=="" {
+		log.Fatal("proof is nil")
+	}
+	//为区块设置nonce和hash
+	b.SetNonce(nonce)
+	b.SetHashCurr(hash)
 	// 将区块加入到链的存储结构中
-	if bs,err := BlockSerialize(*b);err!=nil{
+	if bs,err := block.BlockSerialize(*b);err!=nil{
 		log.Fatal("block can not be serialize")
-	}else if err = bc.db.Put([]byte("b_"+b.hashCurr),bs,nil);err!=nil{
+	}else if err = bc.db.Put([]byte("b_"+b.GetHashCurr()),bs,nil);err!=nil{
 		log.Fatal("block can not be saved")
 	}
 
 	//将最后的区块哈希设置为当前区块
-	bc.lastHash = b.hashCurr
+	bc.lastHash = b.GetHashCurr()
 	//将最后的区块hash存到数据库中
-	if err := bc.db.Put([]byte("lastHash"),[]byte(b.hashCurr),nil);err!=nil{
+	if err := bc.db.Put([]byte("lastHash"),[]byte(b.GetHashCurr()),nil);err!=nil{
 		log.Fatal("lastHash not be saved")
 	}
 	return bc
 }
 
 //通过hash获取区块
-func (bc *BlockChain) GetBlock(hash Hash) (*Block,error) {
+func (bc *BlockChain) GetBlock(hash block.Hash) (*block.Block,error) {
 	data,err := bc.db.Get([]byte("b_"+hash),nil)
 	if err != nil{
 		return nil, err
 	}
 	//反序列化
-	b,err := BlockUnSerialize(data)
+	b,err := block.BlockUnSerialize(data)
 	if err!=nil {
 		return nil, err
 	}
@@ -79,12 +92,18 @@ func (bc *BlockChain) Iterate()  {
 		if err!=nil {
 			log.Fatalf("Block <%s> is not exits",hash)
 		}
-		fmt.Println("HashCurr:",b.hashCurr)
-		fmt.Println("Txs:",b.txs)
-		fmt.Println("Time",b.header.time.Format(time.UnixDate))
-		fmt.Println("HashPerv:",b.header.hashPrevBlock)
+		//做一个hashcash验证
+		pow := pow.NewPow(b)
+		if !pow.Validate() {
+			log.Fatalf("Block <%s> is not Valid",hash)
+			continue
+		}
+		fmt.Println("HashCurr:",b.GetHashCurr())
+		fmt.Println("Txs:",b.GetTxs())
+		fmt.Println("Time",b.GetTime().Format(time.UnixDate))
+		fmt.Println("HashPerv:",b.GetHashPrevBlock())
 		fmt.Println()
-		hash = b.header.hashPrevBlock
+		hash = b.GetHashPrevBlock()
 	}
 }
 
