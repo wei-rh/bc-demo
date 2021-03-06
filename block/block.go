@@ -43,18 +43,6 @@ func NewBlock(prevHash Hash,txs string) *Block {
 	return b
 }
 
-//func (bh *BlockHeader) Stringify() string {
-//	return fmt.Sprintf("%d%s%s%d%d%d",
-//		bh.version,
-//		bh.hashPrevBlock,
-//		bh.hashMerkleRoot,
-//		bh.time.UnixNano(), //得到时间戳， nano 级别
-//		bh.bits,
-//		bh.nonce,
-//		)
-//}
-
-
 
 //bits 属性的getter
 func (b *Block) GetBits() int {

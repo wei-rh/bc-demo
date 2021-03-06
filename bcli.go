@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/wei-rh/bc-demo/blockchain"
+	"github.com/wei-rh/bc-demo/wallet"
 	"log"
 	"os"
 	"strings"
@@ -42,6 +43,12 @@ func main() {
 		//清空
 		bc.Clear()
 		bc.AddGensisBlock()
+	case "create:wallet":
+		fs := flag.NewFlagSet("create:wallet",flag.ExitOnError)
+		pass := fs.String("pass","","")
+		w:= wallet.NewWallet(*pass)
+		fmt.Printf("your mnemonic: %s\n",w.GetMnemonic())
+		fmt.Printf("your address: %s\n",w.Address)
 	case "help":
 		fallthrough
 	default:
@@ -53,7 +60,8 @@ func Usage()  {
 	fmt.Println("bcli is a tool for Blockchain. ")
 	fmt.Println()
 	fmt.Println("Usage: ")
-	fmt.Printf("\t%s\t\t%s\n","bcli createblock <txs>","create block on blockchain")
+	fmt.Printf("\t%s\t\t%s\n","bcli create:block -txs=<txs>","create block on blockchain.")
+	fmt.Printf("\t%s\t\t%s\n","bcli create:block -pass<txs>","create wallet bass on pass.")
 	fmt.Printf("\t%s\t\t\t%s\n", "bcli init", "initial blockchain")
 	fmt.Printf("\t%s \t\t\t%s\n", "bcli he1p","help info for bcli")
 	fmt.Printf("\t%s \t\t\t%s\n", "bc1i show", "show blocks in chain.")
